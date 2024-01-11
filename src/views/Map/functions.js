@@ -19,7 +19,7 @@ function click(e, id) {
  */
 function move(e) {
     let target = e.target
-    console.log(target.getBounds(), target.getCenter(), target.getZoom());
+    // console.log(target.getBounds(), target.getCenter(), target.getZoom());
     // setIsMoving(false)
     // let aux = e.target.transform
     // let [center, zoom, bounds] = [aux._center, aux._zoom, {}]
