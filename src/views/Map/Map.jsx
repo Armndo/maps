@@ -9,7 +9,7 @@ export function Map({ }) {
 
     useEffect(() => {
         axios.get(
-            `https://pezatomico.online/data/maps/mx/ent/1_100.php`
+            `http://www.pezatomico.online/data/maps/mx/ent/1_100.php`
         ).then(res => {
             let aux = {}
 
@@ -131,7 +131,7 @@ export function Map({ }) {
                 load={{
                     source: {
                         type: "geojson",
-                        data: "https://pezatomico.online/data/maps/mx/ent/res.json",
+                        data: "http://www.pezatomico.online/data/maps/mx/ent/res.json",
                         promoteId: "inegi_id",
                     },
                     enableLine: false,
