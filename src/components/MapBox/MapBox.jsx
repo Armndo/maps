@@ -58,11 +58,14 @@ export function MapBox({
                 accessToken,
                 doubleClickZoom,
                 dragRotate,
-                // touchZoomRotate: false,
                 touchPitch: false,
             });
 
             mapbox.touchZoomRotate.disableRotation()
+            mapbox.on("contextmenu", (e) => {
+                e.preventDefault();
+                // console.log(e);
+            })
 
             setMap(mapbox)
             setInit(true)

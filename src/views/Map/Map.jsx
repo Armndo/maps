@@ -3,13 +3,14 @@ import { MapBox } from "../../components";
 import { Popup, MapboxEvent, Map as MB, MapMouseEvent, MapLayerMouseEvent } from "mapbox-gl";
 import { polygonPosition } from "../../utils/functions/polygonPosition";
 import axios from "axios";
+import { assets_url, mapbox_style, mapbox_token } from "../../env";
 
 export function Map({ }) {
     const [data, setData] = useState(null)
 
     useEffect(() => {
         axios.get(
-            `http://data.pezatomico.online/maps/mx/ent/1_100.php`
+            `${assets_url}/maps/mx/ent/data.json`
         ).then(res => {
             let aux = {}
 
@@ -30,7 +31,6 @@ export function Map({ }) {
      */
     function click(e, name, map) {
         const feature = e.features[0]
-        // console.log(feature, e);
 
         if(map.getLayer(`${name}Focus`)) {
             map.removeLayer(`${name}Focus`)
@@ -126,12 +126,12 @@ export function Map({ }) {
                 container="mapita"
                 center={[-101.8440821109478, 23.871020649362663]}
                 zoom={4.665980480878313}
-                style={"mapbox://styles/armndolol/clr72446k011901qldag2czd3"}
-                accessToken={"pk.eyJ1IjoiYXJtbmRvbG9sIiwiYSI6ImNscjcxczRkbjBubWkyaXBicDQwNG1yZXAifQ.AA1zUYjV9fCDn2oHzFyqZw"}
+                accessToken={mapbox_token}
+                style={mapbox_style}
                 load={{
                     source: {
                         type: "geojson",
-                        data: "http://data.pezatomico.online/maps/mx/ent/res.json",
+                        data: `${assets_url}/maps/mx/ent/poly.json`,
                         promoteId: "inegi_id",
                     },
                     enableLine: false,
