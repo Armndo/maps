@@ -3,14 +3,15 @@ import { MapBox } from "../../components";
 import { Popup, MapboxEvent, Map as MB, MapMouseEvent, MapLayerMouseEvent } from "mapbox-gl";
 import { polygonPosition } from "../../utils/functions/polygonPosition";
 import axios from "axios";
-import { assets_url, mapbox_style, mapbox_token } from "../../env";
+import { api_url, assets_url, mapbox_style, mapbox_token } from "../../env";
 
 export function Map({ }) {
     const [data, setData] = useState(null)
 
     useEffect(() => {
         axios.get(
-            `${assets_url}/maps/mx/ent/data.json`
+            `${api_url}/`,
+            // `${assets_url}/maps/mx/ent/data.json`,
         ).then(res => {
             let aux = {}
 

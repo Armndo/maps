@@ -1,9 +1,9 @@
-import { Map, MapboxEvent, AnySourceData, FillPaint, LinePaint } from "mapbox-gl";
+import { Map, MapboxEvent, FillPaint, LinePaint, GeoJSONSource } from "mapbox-gl";
 
 /**
  * @param {object} load
  * @param {Map} load.map
- * @param {AnySourceData} load.source
+ * @param {GeoJSONSource} load.source
  * @param {string} load.name
  * @param {boolean} load.enableFill
  * @param {FillPaint} load.fill
