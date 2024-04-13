@@ -1,3 +1,52 @@
+/* .loader {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(255, 0, 0, 0.25);
+    z-index: 2;
+} */
+
+
+.loader {
+    z-index: 2;
+    background: rgba(255, 0, 0, 0.15);
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+
+}
+
+.loader > span {
+    animation: rotation 1500ms infinite linear;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg) scale(0);
+    }
+
+    25% {
+        transform: rotate(360deg) scale(1);
+    }
+
+    50% {
+        transform: rotate(1080deg) scale(1);
+    }
+
+    75% {
+        transform: rotate(360deg) scale(1);
+    }
+
+    100% {
+        transform: rotate(0deg) scale(0);
+    }
+}
+
 .indicator-container {
     position: fixed;
     display: block;
@@ -5,7 +54,7 @@
     /* height: 2rem; */
     background: rgba(0, 0, 0, 0.5);
     /* text-align: left; */
-    z-index: 9999;
+    z-index: 1;
     color: white;
     text-align: center;
 }

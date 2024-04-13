@@ -7,11 +7,13 @@ import { api_url, assets_url, mapbox_style, mapbox_token } from "../../env";
 import { formatNumber, indicators } from "../../utils";
 import { addData, loadSource } from "../../components/MapBox/functions";
 import "./Map.css"
+import { benito } from "../../assets";
 
 export function Map({ }) {
     const [data, setData] = useState(null)
     const [metric, setMetric] = useState("Población total")
     const [map, setMap] = useState(null)
+    const [loading, setLoading] = useState(false)
     const mapRef = useRef(null)
 
     useEffect(() => {
@@ -46,6 +48,8 @@ export function Map({ }) {
     }, [data, map])
 
     function fetch(indicator = null) {
+        setLoading(true)
+
         axios.get(
             `${api_url}/maps`,
             {
@@ -58,7 +62,10 @@ export function Map({ }) {
 
             setData(aux)
         }).catch(err => {
+            alert(`Error al traer la información para "${metric}"`)
             setMetric("Población total")
+        }).finally(() => {
+            setLoading(false)
         })
     }
 
@@ -149,6 +156,11 @@ export function Map({ }) {
     }
 
     return <div style={{ height: "100vh" }}>
+        {loading && <div className="loader">
+            <span>
+                <img src={benito} alt="loader"/>
+            </span>
+        </div>}
         {data && <div className="indicator-container">
             {"Indicador: "}
             <select value={metric} onChange={(e) => setMetric(e.target.value)}>
