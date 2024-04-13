@@ -12,7 +12,8 @@
 
 .indicator-container > select {
     /* display: block; */
-    width: 10rem;
+    min-width: 10rem;
+    width: 25%;
     border: none;
     background: rgba(255, 255, 255, 0.1);
     color: white;

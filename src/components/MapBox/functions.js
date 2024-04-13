@@ -28,8 +28,6 @@ function loadSource({
     onHover = () => {},
 }) {
     // map.on("load", () => {
-        console.log("load source");
-
         map.addSource(name, source);
 
         if(source.type === "geojson") {
@@ -86,9 +84,11 @@ function loadSource({
 
 /**
  * @param {Map} map
- * @param {object} data 
+ * @param {object} data
+ * @param {string} name
+ * @param {string} extra
  */
-function addData(map, data, name) {
+function addData(map, data, name, extra) {
     // map.on("load", () => {
         for(const [id, value] of Object.entries(data)) {
             map.setFeatureState({ source: name, id }, { value },)
@@ -101,7 +101,7 @@ function addData(map, data, name) {
             source: name,
             layout: {},
             metadata: {
-                "lol": 1
+                extra: extra,
             },
             paint: {
                 "fill-opacity": 1,

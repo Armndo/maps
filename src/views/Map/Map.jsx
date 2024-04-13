@@ -10,15 +10,22 @@ import "./Map.css"
 
 export function Map({ }) {
     const [data, setData] = useState(null)
+    const [metric, setMetric] = useState("Población total")
     const [map, setMap] = useState(null)
     const mapRef = useRef(null)
 
     useEffect(() => {
-        fetch()
-    }, [])
+        if(metric) {
+            fetch(indicators[metric])
+        }
+    }, [metric])
 
     useEffect(() => {
         if(data && map) {
+            for(let popup of map._popups) {
+                popup.remove()
+            }
+
             if(!map.getSource("mexico")) {
                 loadSource({
                     map,
@@ -34,7 +41,7 @@ export function Map({ }) {
                 })    
             }
 
-            addData(map, data, "mexico")
+            addData(map, data, "mexico", metric)
         }
     }, [data, map])
 
@@ -51,7 +58,7 @@ export function Map({ }) {
 
             setData(aux)
         }).catch(err => {
-
+            setMetric("Población total")
         })
     }
 
@@ -83,7 +90,7 @@ export function Map({ }) {
 
         new Popup({closeOnClick: true, })
             .setLngLat(center)
-            .setHTML(`${feature.properties.geo_name}<br>${formatNumber(feature.state.value)}`)
+            .setHTML(`${feature.properties.geo_name}<br>${feature.layer.metadata.extra}:<br>${formatNumber((+feature.state.value).toFixed(Number.isInteger(+feature.state.value) ? 0 : 3))}${feature.layer.metadata.extra.includes("centaj") ? "%" : ""}`)
             .on("close", () => {
                 if(map.getLayer(`${name}Focus`)) {
                     map.removeLayer(`${name}Focus`)
@@ -144,9 +151,9 @@ export function Map({ }) {
     return <div style={{ height: "100vh" }}>
         {data && <div className="indicator-container">
             {"Indicador: "}
-            <select onChange={(e) => fetch(e.target.value)}>
+            <select value={metric} onChange={(e) => setMetric(e.target.value)}>
                 <option value="">Seleccionar Indicador</option>
-                {Object.entries(indicators).map(([key, value]) => <option selected={value === 1002000001} value={value}>{key}</option>)}
+                {Object.keys(indicators).map(key => <option key={key} value={key}>{key}</option>)}
             </select>
         </div>}
         <div style={{ height: "100%" }}>
