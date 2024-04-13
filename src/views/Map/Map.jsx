@@ -5,9 +5,11 @@ import { polygonPosition } from "../../utils/functions/polygonPosition";
 import axios from "axios";
 import { api_url, assets_url, mapbox_style, mapbox_token } from "../../env";
 import { formatNumber } from "../../utils";
+import { addData, loadSource } from "../../components/MapBox/functions";
 
 export function Map({ }) {
     const [data, setData] = useState(null)
+    const [load, setLoad] = useState(null)
     const [map, setMap] = useState(null)
     const mapRef = useRef(null)
 
@@ -18,15 +20,32 @@ export function Map({ }) {
         ).then(res => {
             let aux = res.data
 
-            // for(let id of Object.keys(res.data)) {
-            //     aux[id] = Math.random()*999 + 1
-            // }
-
             setData(aux)
         }).catch(err => {
 
         })
     }, [])
+
+    useEffect(() => {
+        if(data && map) {
+            if(!map.getSource("mexico")) {
+                loadSource({
+                    map,
+                    source: {
+                        type: "geojson",
+                        data: `${assets_url}/maps/mx/ent/poly.json`,
+                        promoteId: "inegi_id",
+                    },
+                    enableLine: false,
+                    name: "mexico",
+                    onClick: click,
+                    onHover: hover
+                })
+
+                addData(map, data, "mexico")
+            }
+        }
+    }, [data, map])
 
     /**
      * @param {MapLayerMouseEvent} e 
@@ -127,9 +146,8 @@ export function Map({ }) {
             // height: "calc(100% - 2rem)"
             height: "100%",
         }}>
-            {data && <MapBox
+            <MapBox
                 mapRef={mapRef}
-                map={map}
                 setMap={setMap}
                 container="mapita"
                 center={[-101.8440821109478, 23.871020649362663]}
@@ -142,19 +160,7 @@ export function Map({ }) {
                 ]}
                 accessToken={mapbox_token}
                 style={mapbox_style}
-                load={{
-                    source: {
-                        type: "geojson",
-                        data: `${assets_url}/maps/mx/ent/poly.json`,
-                        promoteId: "inegi_id",
-                    },
-                    enableLine: false,
-                    name: "mexico",
-                    onClick: click,
-                    onHover: hover
-                }}
-                data={data}
-            />}
+            />
         </div>
     </div>
 }

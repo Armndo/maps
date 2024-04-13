@@ -5,7 +5,6 @@ import { click, loadSource, move } from "./functions";
 /**
  * @param {object} props
  * @param {MutableRefObject} props.mapRef
- * @param {Map} props.map
  * @param {Dispatch} props.setMap
  * @param {string} props.container
  * @param {[lat: number, lon: number]} [props.center]
@@ -15,22 +14,9 @@ import { click, loadSource, move } from "./functions";
  * @param {string} props.accessToken
  * @param {boolean} [props.doubleClickZoom]
  * @param {boolean} [props.dragRotate]
- * @param {object} [props.load]
- * @param {AnySourceData} props.load.source
- * @param {string} props.load.name
- * @param {boolean} props.load.enableFill
-* @param {FillPaint} props.load.fill
-* @param {boolean} props.load.enableLine
-* @param {LinePaint} props.load.line
-* @param {boolean} props.load.enableClick
-* @param {Function} props.load.onClick
-* @param {boolean} props.load.enableHover
-* @param {Function} props.load.onHover
-* @param {object} props.data
  */
 export function MapBox({
     mapRef,
-    map,
     setMap,
     container = "map",
     center = undefined,
@@ -40,13 +26,6 @@ export function MapBox({
     accessToken,
     doubleClickZoom = undefined,
     dragRotate = undefined,
-    load = {
-        source: undefined,
-        name: undefined,
-        onClick: () => {},
-        onHover: () => {},
-    },
-    data = null,
 }) {
     const [init, setInit] = useState(false)
     const [loaded, setLoaded] = useState(false)
@@ -74,50 +53,6 @@ export function MapBox({
             setInit(true)
         }
     }, [init]);
-
-    useEffect(() => {
-        if(init && !loaded && load.source) {
-            loadSource({map, ...load})
-            setLoaded(true)
-        }
-    }, [init, load])
-
-    useEffect(() => {
-        if(init && loaded && data) {
-            addData(map, data, load.name)
-        }
-    }, [init, loaded, data])
-
-    /**
-     * @param {Map} map
-     * @param {object} data 
-     */
-    function addData(map, data, name) {
-        map.on("load", () => {
-            for(const [id, value] of Object.entries(data)) {
-                map.setFeatureState({ source: name, id }, { value },)
-            }
-
-            map.removeLayer(`${name}Fill`)
-            map.addLayer({
-                id: `${name}Fill`,
-                type: "fill",
-                source: name,
-                layout: {},
-                metadata: {
-                    "lol": 1
-                },
-                paint: {
-                    "fill-opacity": 1,
-                    'fill-color': ['interpolate-hcl', ['linear'], ['feature-state', 'value'], Math.min(...Object.values(data)), '#00f', Math.max(...Object.values(data)), '#fff']
-                }
-            });
-
-            if(map.getLayer(`${name}Line`)) {
-                map.moveLayer(`${name}Fill`, `${name}Line`)
-            }
-        })
-    }
 
     return <>
         <div

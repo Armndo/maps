@@ -27,7 +27,7 @@ function loadSource({
     enableHover = true,
     onHover = () => {},
 }) {
-    map.on("load", () => {
+    // map.on("load", () => {
         console.log("load source");
 
         map.addSource(name, source);
@@ -79,8 +79,40 @@ function loadSource({
         }
 
         // map.on("rotate", e => alert(JSON.stringify(Object.keys(e))))
-    });
+    // });
 
+}
+
+
+/**
+ * @param {Map} map
+ * @param {object} data 
+ */
+function addData(map, data, name) {
+    // map.on("load", () => {
+        for(const [id, value] of Object.entries(data)) {
+            map.setFeatureState({ source: name, id }, { value },)
+        }
+
+        map.removeLayer(`${name}Fill`)
+        map.addLayer({
+            id: `${name}Fill`,
+            type: "fill",
+            source: name,
+            layout: {},
+            metadata: {
+                "lol": 1
+            },
+            paint: {
+                "fill-opacity": 1,
+                'fill-color': ['interpolate-hcl', ['linear'], ['feature-state', 'value'], Math.min(...Object.values(data)), '#00f', Math.max(...Object.values(data)), '#fff']
+            }
+        });
+
+        if(map.getLayer(`${name}Line`)) {
+            map.moveLayer(`${name}Fill`, `${name}Line`)
+        }
+    // })
 }
 
 /**
@@ -111,6 +143,7 @@ function move(e) {
 
 export {
     loadSource,
+    addData,
     click,
     move,
 }
