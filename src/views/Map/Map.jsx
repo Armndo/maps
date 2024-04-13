@@ -4,6 +4,7 @@ import { Popup, MapboxEvent, Map as MB, MapMouseEvent, MapLayerMouseEvent } from
 import { polygonPosition } from "../../utils/functions/polygonPosition";
 import axios from "axios";
 import { api_url, assets_url, mapbox_style, mapbox_token } from "../../env";
+import { formatNumber } from "../../utils";
 
 export function Map({ }) {
     const [data, setData] = useState(null)
@@ -15,11 +16,11 @@ export function Map({ }) {
             `${api_url}/maps`,
             // `${assets_url}/maps/mx/ent/data.json`,
         ).then(res => {
-            let aux = {}
+            let aux = res.data
 
-            for(let id of Object.keys(res.data)) {
-                aux[id] = Math.random()*999 + 1
-            }
+            // for(let id of Object.keys(res.data)) {
+            //     aux[id] = Math.random()*999 + 1
+            // }
 
             setData(aux)
         }).catch(err => {
@@ -55,7 +56,7 @@ export function Map({ }) {
 
         new Popup({ anchor: "bottom-left", closeOnClick: true, })
             .setLngLat(center)
-            .setHTML(`${feature.properties.geo_name}<br>${feature.state.value}`)
+            .setHTML(`${feature.properties.geo_name}<br>Población: ${formatNumber(feature.state.value)}`)
             .on("close", () => {
                 if(map.getLayer(`${name}Focus`)) {
                     map.removeLayer(`${name}Focus`)
@@ -116,16 +117,17 @@ export function Map({ }) {
     return <div style={{
         height: "100vh"
     }}>
-        <span style={{
+        {/* <span style={{
             display: "block",
             height: "2rem",
         }}>
             this is a map
-        </span>
+        </span> */}
         <div style={{
-            height: "calc(100% - 2rem)"
+            // height: "calc(100% - 2rem)"
+            height: "100%",
         }}>
-            <MapBox
+            {data && <MapBox
                 mapRef={mapRef}
                 map={map}
                 setMap={setMap}
@@ -152,7 +154,7 @@ export function Map({ }) {
                     onHover: hover
                 }}
                 data={data}
-            />
+            />}
         </div>
     </div>
 }

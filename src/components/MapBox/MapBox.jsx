@@ -109,7 +109,7 @@ export function MapBox({
                 },
                 paint: {
                     "fill-opacity": 1,
-                    'fill-color': ['interpolate-hcl', ['linear'], ['feature-state', 'value'], Math.min(...Object.values(data)), '#0000f0', Math.max(...Object.values(data))/2, '#00f000', Math.max(...Object.values(data)), '#f00000']
+                    'fill-color': ['interpolate-hcl', ['linear'], ['feature-state', 'value'], Math.min(...Object.values(data)), '#00f', Math.max(...Object.values(data)), '#fff']
                 }
             });
 

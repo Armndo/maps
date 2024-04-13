@@ -1,5 +1,8 @@
 import { polygonPosition } from "./polygonPosition";
+import { formatNumber } from "./formatNumber";
+
 
 export {
-    polygonPosition
+    polygonPosition,
+    formatNumber
 }
