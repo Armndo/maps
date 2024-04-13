@@ -73,3 +73,7 @@
     color: white;
     font-size: 1rem;
 }
+
+.indicator-container > select > option {
+    color: black;
+}
