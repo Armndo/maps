@@ -12,7 +12,7 @@ export function Map({ }) {
 
     useEffect(() => {
         axios.get(
-            `${api_url}/`,
+            `${api_url}/maps`,
             // `${assets_url}/maps/mx/ent/data.json`,
         ).then(res => {
             let aux = {}
@@ -133,10 +133,10 @@ export function Map({ }) {
                 center={[-101.8440821109478, 23.871020649362663]}
                 zoom={4.665980480878313}
                 bounds={[
-                    -118.3651144550222,
-                    14.532098178781522,
-                    -86.7323674969506,
-                    32.718653318809636
+                    -118.3651144550222-1,
+                    14.532098178781522-1,
+                    -86.7323674969506+1,
+                    32.718653318809636+1
                 ]}
                 accessToken={mapbox_token}
                 style={mapbox_style}
