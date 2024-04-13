@@ -22,7 +22,12 @@
 }
 
 .loader > span {
-    animation: rotation 1500ms infinite linear;
+    animation: rotation 1000ms infinite linear;
+}
+
+.loader > span > img {
+    width: 25%;
+    height: auto;
 }
 
 @keyframes rotation {
