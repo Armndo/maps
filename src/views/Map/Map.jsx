@@ -46,7 +46,6 @@ export function Map({ }) {
                     indicator,
                 }
             }
-            // `${assets_url}/maps/mx/ent/data.json`,
         ).then(res => {
             let aux = res.data
 
@@ -142,9 +141,7 @@ export function Map({ }) {
         //     .addTo(map);
     }
 
-    return <div style={{
-        height: "100vh"
-    }}>
+    return <div style={{ height: "100vh" }}>
         {data && <div className="indicator-container">
             {"Indicador: "}
             <select onChange={(e) => fetch(e.target.value)}>
@@ -152,10 +149,7 @@ export function Map({ }) {
                 {Object.entries(indicators).map(([key, value]) => <option selected={value === 1002000001} value={value}>{key}</option>)}
             </select>
         </div>}
-        <div style={{
-            // height: "calc(100% - 2rem)"
-            height: "100%",
-        }}>
+        <div style={{ height: "100%" }}>
             <MapBox
                 mapRef={mapRef}
                 setMap={setMap}
