@@ -1,9 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { MutableRefObject, Dispatch, useEffect, useRef, useState } from "react";
 import mapboxgl, { Map, AnySourceData, FillPaint, LinePaint } from "mapbox-gl";
 import { click, loadSource, move } from "./functions";
 
 /**
  * @param {object} props
+ * @param {MutableRefObject} props.mapRef
+ * @param {Map} props.map
+ * @param {Dispatch} props.setMap
  * @param {string} props.container
  * @param {[lat: number, lon: number]} [props.center]
  * @param {number} [props.zoom]
@@ -26,6 +29,9 @@ import { click, loadSource, move } from "./functions";
 * @param {object} props.data
  */
 export function MapBox({
+    mapRef,
+    map,
+    setMap,
     container = "map",
     center = undefined,
     zoom = undefined,
@@ -44,8 +50,6 @@ export function MapBox({
 }) {
     const [init, setInit] = useState(false)
     const [loaded, setLoaded] = useState(false)
-    const [map, setMap] = useState(null)
-    const mapRef = useRef(null)
 
     useEffect(() => {
         if (!init) {
@@ -64,7 +68,6 @@ export function MapBox({
             mapbox.touchZoomRotate.disableRotation()
             mapbox.on("contextmenu", (e) => {
                 e.preventDefault();
-                // console.log(e);
             })
 
             setMap(mapbox)

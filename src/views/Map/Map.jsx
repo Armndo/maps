@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MapBox } from "../../components";
 import { Popup, MapboxEvent, Map as MB, MapMouseEvent, MapLayerMouseEvent } from "mapbox-gl";
 import { polygonPosition } from "../../utils/functions/polygonPosition";
@@ -7,6 +7,8 @@ import { api_url, assets_url, mapbox_style, mapbox_token } from "../../env";
 
 export function Map({ }) {
     const [data, setData] = useState(null)
+    const [map, setMap] = useState(null)
+    const mapRef = useRef(null)
 
     useEffect(() => {
         axios.get(
@@ -124,9 +126,18 @@ export function Map({ }) {
             height: "calc(100% - 2rem)"
         }}>
             <MapBox
+                mapRef={mapRef}
+                map={map}
+                setMap={setMap}
                 container="mapita"
                 center={[-101.8440821109478, 23.871020649362663]}
                 zoom={4.665980480878313}
+                bounds={[
+                    -118.3651144550222,
+                    14.532098178781522,
+                    -86.7323674969506,
+                    32.718653318809636
+                ]}
                 accessToken={mapbox_token}
                 style={mapbox_style}
                 load={{
