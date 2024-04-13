@@ -4,26 +4,17 @@ import { Popup, MapboxEvent, Map as MB, MapMouseEvent, MapLayerMouseEvent } from
 import { polygonPosition } from "../../utils/functions/polygonPosition";
 import axios from "axios";
 import { api_url, assets_url, mapbox_style, mapbox_token } from "../../env";
-import { formatNumber } from "../../utils";
+import { formatNumber, indicators } from "../../utils";
 import { addData, loadSource } from "../../components/MapBox/functions";
+import "./Map.css"
 
 export function Map({ }) {
     const [data, setData] = useState(null)
-    const [load, setLoad] = useState(null)
     const [map, setMap] = useState(null)
     const mapRef = useRef(null)
 
     useEffect(() => {
-        axios.get(
-            `${api_url}/maps`,
-            // `${assets_url}/maps/mx/ent/data.json`,
-        ).then(res => {
-            let aux = res.data
-
-            setData(aux)
-        }).catch(err => {
-
-        })
+        fetch()
     }, [])
 
     useEffect(() => {
@@ -40,12 +31,30 @@ export function Map({ }) {
                     name: "mexico",
                     onClick: click,
                     onHover: hover
-                })
-
-                addData(map, data, "mexico")
+                })    
             }
+
+            addData(map, data, "mexico")
         }
     }, [data, map])
+
+    function fetch(indicator = null) {
+        axios.get(
+            `${api_url}/maps`,
+            {
+                params: {
+                    indicator,
+                }
+            }
+            // `${assets_url}/maps/mx/ent/data.json`,
+        ).then(res => {
+            let aux = res.data
+
+            setData(aux)
+        }).catch(err => {
+
+        })
+    }
 
     /**
      * @param {MapLayerMouseEvent} e 
@@ -73,9 +82,9 @@ export function Map({ }) {
 
         const {bounds, center} = polygonPosition(feature.geometry)
 
-        new Popup({ anchor: "bottom-left", closeOnClick: true, })
+        new Popup({closeOnClick: true, })
             .setLngLat(center)
-            .setHTML(`${feature.properties.geo_name}<br>Población: ${formatNumber(feature.state.value)}`)
+            .setHTML(`${feature.properties.geo_name}<br>${formatNumber(feature.state.value)}`)
             .on("close", () => {
                 if(map.getLayer(`${name}Focus`)) {
                     map.removeLayer(`${name}Focus`)
@@ -136,12 +145,13 @@ export function Map({ }) {
     return <div style={{
         height: "100vh"
     }}>
-        {/* <span style={{
-            display: "block",
-            height: "2rem",
-        }}>
-            this is a map
-        </span> */}
+        {data && <div className="indicator-container">
+            {"Indicador: "}
+            <select onChange={(e) => fetch(e.target.value)}>
+                <option value="">Seleccionar Indicador</option>
+                {Object.entries(indicators).map(([key, value]) => <option selected={value === 1002000001} value={value}>{key}</option>)}
+            </select>
+        </div>}
         <div style={{
             // height: "calc(100% - 2rem)"
             height: "100%",
