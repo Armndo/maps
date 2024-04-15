@@ -1,4 +1,4 @@
-import React, { MutableRefObject, Dispatch, useEffect, useRef, useState } from "react";
+import React, { MutableRefObject, Dispatch, useEffect, useState } from "react";
 import mapboxgl, { Map, AnySourceData, FillPaint, LinePaint } from "mapbox-gl";
 import { click, loadSource, move } from "./functions";
 

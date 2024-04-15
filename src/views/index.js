@@ -1,5 +1,8 @@
 import { Map } from "./Map";
+import { Admin, Login } from "./Admin";
 
 export {
-    Map
+    Map,
+    Admin,
+    Login,
 }

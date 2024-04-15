@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MapBox } from "../../components";
-import { Popup, MapboxEvent, Map as MB, MapMouseEvent, MapLayerMouseEvent } from "mapbox-gl";
+import { Loader, MapBox } from "../../components";
+import { Popup, Map as MB, MapLayerMouseEvent } from "mapbox-gl";
 import { polygonPosition } from "../../utils/functions/polygonPosition";
 import axios from "axios";
 import { api_url, assets_url, mapbox_style, mapbox_token } from "../../env";
@@ -156,17 +156,31 @@ export function Map({ }) {
     }
 
     return <div style={{ height: "100vh" }}>
-        {loading && <div className="loader">
-            <span>
-                <img src={benito} alt="loader"/>
-            </span>
-        </div>}
+        <Loader loading={loading}/>
         {data && <div className="indicator-container">
             {"Indicador: "}
             <select value={metric} onChange={(e) => setMetric(e.target.value)}>
                 <option value="">Seleccionar Indicador</option>
                 {Object.keys(indicators).map(key => <option key={key} value={key}>{key}</option>)}
             </select>
+            <input type="file" onChange={e => {
+                const formData = new FormData()
+                formData.append("name", "test");
+                formData.append("file", e.target.files[0]);
+
+                axios.post(
+                    `${api_url}/process`,
+                    formData
+                ).then(res => {
+                    console.log(res);
+                }).catch(err => {
+                    console.log(err);
+                })
+            }}/>
+            {/* <select value={metric} onChange={(e) => setMetric(e.target.value)}>
+                <option value="">Seleccionar Indicador</option>
+                {Object.keys(indicators).map(key => <option key={key} value={key}>{key}</option>)}
+            </select> */}
         </div>}
         <div style={{ height: "100%" }}>
             <MapBox
