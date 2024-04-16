@@ -163,20 +163,6 @@ export function Map({ }) {
                 <option value="">Seleccionar Indicador</option>
                 {Object.keys(indicators).map(key => <option key={key} value={key}>{key}</option>)}
             </select>
-            <input type="file" onChange={e => {
-                const formData = new FormData()
-                formData.append("name", "test");
-                formData.append("file", e.target.files[0]);
-
-                axios.post(
-                    `${api_url}/process`,
-                    formData
-                ).then(res => {
-                    console.log(res);
-                }).catch(err => {
-                    console.log(err);
-                })
-            }}/>
             {/* <select value={metric} onChange={(e) => setMetric(e.target.value)}>
                 <option value="">Seleccionar Indicador</option>
                 {Object.keys(indicators).map(key => <option key={key} value={key}>{key}</option>)}

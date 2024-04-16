@@ -21,6 +21,25 @@ export function Admin({}) {
         {isLogged && <div>
             <h3>admin</h3>
             <div>
+                <input type="file" onChange={e => {
+                    const formData = new FormData()
+                    formData.append("name", "test");
+                    formData.append("file", e.target.files[0]);
+
+                    axios.post(
+                        `${api_url}/process`,
+                        formData,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                            }
+                        }
+                    ).then(res => {
+                        console.log(res);
+                    }).catch(err => {
+                        console.log(err);
+                    })
+                }}/>
                 <button onClick={() => logout(setLoading, Nav)}>log out</button>
             </div>
         </div>}
