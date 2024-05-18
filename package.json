@@ -2,7 +2,7 @@
   "name": "test",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://maps.pezatomico.online",
+  "homepage": "https://maps.pezatomico.com",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -13,6 +13,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.5",
+    "ejs": "^3.1.10",
     "express": "^4.19.2",
     "follow-redirects": "^1.15.6",
     "mapbox-gl": "^3.0.1",
@@ -31,7 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "react-scripts build && sh -c \"$(curl -s https://assets.pezatomico.online/scripts/deploy)\""
+    "deploy": "react-scripts build && sh -c \"$(curl -s https://assets.pezatomico.com/scripts/deploy)\""
   },
   "eslintConfig": {
     "extends": [

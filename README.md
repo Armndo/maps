@@ -4,4 +4,4 @@ A map sandbox for polygons and geospatial data, developed with ReactJS in conjun
 
 For the moment it consumes and displays data from the INEGI API.
 
-### Demo available at: [https://maps.pezatomico.online/](https://maps.pezatomico.online/)
+### Demo available at: [https://maps.pezatomico.com/](https://maps.pezatomico.com/)
