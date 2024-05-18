@@ -71,6 +71,7 @@ function processGeojson(data, setLoading, setResult) {
 
     const formData = new FormData()
     formData.append("name", data.name)
+    formData.append("id", data.id)
     formData.append("file", data.file[0])
 
     axios.post(
@@ -82,9 +83,9 @@ function processGeojson(data, setLoading, setResult) {
             }
         }
     ).then(res => {
-        setResult("success")
+        setResult({status: res.data.status, message: res.data.message})
     }).catch(err => {
-        setResult("failure")
+        setResult({status: "failure", message: null})
         console.log(err);
     }).finally(() => {
         setLoading(false)

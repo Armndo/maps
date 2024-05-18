@@ -26,7 +26,10 @@ export function Admin({}) {
     const [loading, setLoading] = useState(false)
     const [isLogged, setIsLogged] = useState(false)
     const [filename, setFilename] = useState(null)
-    const [result, setResult] = useState(null)
+    const [result, setResult] = useState({
+        status: null,
+        message: null,
+    })
     const Nav = useNavigate()
 
     useEffect(() => {
@@ -34,11 +37,11 @@ export function Admin({}) {
     }, [])
 
     function alert(result, setResult) {
-        switch(result) {
+        switch(result.status) {
             case "success":
                 return <Alert variant="outlined" severity="success" onClose={() => setResult(null)}>
                     <AlertTitle>Success</AlertTitle>
-                    The GeoJSON was uploaded correcly.
+                    {result.message}
                 </Alert>
             case "failure":
                 return <Alert variant="outlined" severity="error" onClose={() => setResult(null)}>
@@ -89,6 +92,15 @@ export function Admin({}) {
                         name="name"
                         {...register("name")}
                     />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="id"
+                        label="GeoJSON id"
+                        name="id"
+                        {...register("id")}
+                    />
                     <Button
                         component="label"
                         variant="outlined"
@@ -122,34 +134,4 @@ export function Admin({}) {
             </Box>
         </Container>
     </ThemeProvider>
-
-    return <div className="admin">
-        <Loader loading={loading} />
-        {isLogged && <div>
-
-            {/* <h3>admin</h3>
-            <div>
-                <input type="file" onChange={e => {
-                    const formData = new FormData()
-                    formData.append("name", "test");
-                    formData.append("file", e.target.files[0]);
-
-                    axios.post(
-                        `${api_url}/process`,
-                        formData,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-                            }
-                        }
-                    ).then(res => {
-                        console.log(res);
-                    }).catch(err => {
-                        console.log(err);
-                    })
-                }}/>
-                <button onClick={() => logout(setLoading, Nav)}>log out</button>
-            </div> */}
-        </div>}
-    </div>
 }

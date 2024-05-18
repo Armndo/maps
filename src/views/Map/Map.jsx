@@ -11,16 +11,33 @@ import { benito } from "../../assets";
 
 export function Map({ }) {
     const [data, setData] = useState(null)
-    const [metric, setMetric] = useState("Población total")
+    const [state, setState] = useState({
+        geo: "mx_ent",
+        source: "inegi",
+        metric: "Población total"
+    })
+    // const [geo, setGeo] = useState("mx_ent")
+    // const [source, setSource] = useState("inegi")
+    // const [metric, setMetric] = useState("Población total")
     const [map, setMap] = useState(null)
+    const [loaded, setLoaded] = useState(false)
     const [loading, setLoading] = useState(false)
     const mapRef = useRef(null)
 
     useEffect(() => {
-        if(metric) {
-            fetch(indicators[metric])
+        if(state) {
+            init()
         }
-    }, [metric])
+    }, [state])
+
+    console.log(map, data, state);
+
+
+    // useEffect(() => {
+    //     if(state) {
+    //         fetch(indicators[state.metric])
+    //     }
+    // }, [state])
 
     useEffect(() => {
         if(data && map) {
@@ -43,9 +60,37 @@ export function Map({ }) {
                 })    
             }
 
-            addData(map, data, "mexico", metric)
+            addData(map, data, "mexico", state.metric)
         }
     }, [data, map])
+
+    function init() {
+        setLoading(true)
+
+        axios.get(
+            `${api_url}/map`,
+            {
+                params: {
+                    ...state,
+                }
+            }
+        ).then(res => {
+            let aux = res.data
+
+            setData(aux)
+        }).catch(err => {
+            alert(`Error al traer la información para "${state.metric}"`)
+            // setMetric("Población total")
+            setState({
+                ...state,
+                geo: "mx_ent",
+                source: "inegi",
+                metric: "Población total"
+            })
+        }).finally(() => {
+            setLoading(false)
+        })
+    }
 
     function fetch(indicator = null) {
         setLoading(true)
@@ -62,8 +107,12 @@ export function Map({ }) {
 
             setData(aux)
         }).catch(err => {
-            alert(`Error al traer la información para "${metric}"`)
-            setMetric("Población total")
+            alert(`Error al traer la información para "${state.metric}"`)
+            // setMetric("Población total")
+            setState({
+                ...state,
+                metric: "Población total"
+            })
         }).finally(() => {
             setLoading(false)
         })
@@ -158,8 +207,20 @@ export function Map({ }) {
     return <div style={{ height: "100vh" }}>
         <Loader loading={loading}/>
         {data && <div className="indicator-container">
+            {"Geo: "}
+            <select value={state.geo} onChange={(e) => setState({...state, geo: e.target.value})}>
+                <option value="">Seleccionar Geo</option>
+                <option value="mx_ent">mx_ent</option>
+                {/* {Object.keys(indicators).map(key => <option key={key} value={key}>{key}</option>)} */}
+            </select>
+            {"Fuente: "}
+            <select value={state.source} onChange={(e) => setState({...state, source: e.target.value})}>
+                <option value="">Seleccionar Fuente</option>
+                <option value="inegi">inegi</option>
+                {/* {Object.keys(indicators).map(key => <option key={key} value={key}>{key}</option>)} */}
+            </select>
             {"Indicador: "}
-            <select value={metric} onChange={(e) => setMetric(e.target.value)}>
+            <select value={state.metric} onChange={(e) => setState({...state, metric: e.target.value})}>
                 <option value="">Seleccionar Indicador</option>
                 {Object.keys(indicators).map(key => <option key={key} value={key}>{key}</option>)}
             </select>
